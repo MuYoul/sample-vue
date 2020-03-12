@@ -1,5 +1,5 @@
 def SERVICE_GROUP = "sample"
-def SERVICE_NAME = "sample-vue"
+def SERVICE_NAME = "vue"
 def IMAGE_NAME = "${SERVICE_GROUP}-${SERVICE_NAME}"
 def REPOSITORY_URL = "https://github.com/MuYoul/sample-vue.git"
 def REPOSITORY_SECRET = ""
@@ -85,7 +85,7 @@ podTemplate(label: label, containers: [
         container("builder") {
           try {
             // deploy(cluster, namespace, sub_domain, profile)
-            butler.deploy("dev", "${SERVICE_GROUP}-dev", "${IMAGE_NAME}-dev", "dev")
+            butler.deploy("here", "${SERVICE_GROUP}-dev", "${IMAGE_NAME}-dev", "dev")
             butler.success(SLACK_TOKEN_DEV, "Deploy DEV")
           } catch (e) {
             butler.failure(SLACK_TOKEN_DEV, "Deploy DEV")
