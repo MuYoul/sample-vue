@@ -46,7 +46,7 @@ podTemplate(label: label, containers: [
     stage("Build") {
       container("node") {
         try {
-          sh 'npm install'
+	  sh 'npm install'
           butler.npm_build()
           butler.success(SLACK_TOKEN_DEV, "Build")
         } catch (e) {
@@ -61,8 +61,7 @@ podTemplate(label: label, containers: [
           "Build Docker": {
             container("builder") {
               try {
-		butler.build_image()
-		
+                butler.build_image()
               } catch (e) {
                 butler.failure(SLACK_TOKEN_DEV, "Build Docker")
                 throw e
@@ -85,7 +84,7 @@ podTemplate(label: label, containers: [
         container("builder") {
           try {
             // deploy(cluster, namespace, sub_domain, profile)
-            butler.deploy("here", "${SERVICE_GROUP}-dev", "${IMAGE_NAME}-dev", "dev")
+            butler.deploy("dev", "${SERVICE_GROUP}-dev", "${IMAGE_NAME}-dev", "dev")
             butler.success(SLACK_TOKEN_DEV, "Deploy DEV")
           } catch (e) {
             butler.failure(SLACK_TOKEN_DEV, "Deploy DEV")

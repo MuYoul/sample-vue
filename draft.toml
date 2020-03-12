@@ -1,6 +1,6 @@
 [environments]
   [environments.development]
-    name = "sample-sample-vue-development"
+    name = "sample-vue-development"
     namespace = "development"
     wait = true
     watch = false
