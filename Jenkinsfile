@@ -14,7 +14,8 @@ properties([
   buildDiscarder(logRotator(daysToKeepStr: "60", numToKeepStr: "30"))
 ])
 podTemplate(label: label, containers: [
-  containerTemplate(name: "builder", image: "opsnowtools/valve-builder:v0.2.2", command: "cat", ttyEnabled: true, alwaysPullImage: true)
+  containerTemplate(name: "builder", image: "opsnowtools/valve-builder:v0.2.2", command: "cat", ttyEnabled: true, alwaysPullImage: true),
+  containerTemplate(name: "node", image: "node:10", command: "cat", ttyEnabled: true)
 ], volumes: [
   hostPathVolume(mountPath: "/var/run/docker.sock", hostPath: "/var/run/docker.sock"),
   hostPathVolume(mountPath: "/home/jenkins/.draft", hostPath: "/home/jenkins/.draft"),
@@ -39,7 +40,18 @@ podTemplate(label: label, containers: [
           throw e
         }
 
-        butler.scan("nginx")
+        butler.scan("nodejs")
+      }
+    }
+    stage("Build") {
+      container("node") {
+        try {
+          butler.npm_build()
+          butler.success(SLACK_TOKEN_DEV, "Build")
+        } catch (e) {
+          butler.failure(SLACK_TOKEN_DEV, "Build")
+          throw e
+        }
       }
     }
     if (BRANCH_NAME == "master") {
