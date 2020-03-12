@@ -1,8 +1,6 @@
 # Dockerfile
 
-FROM node:10-alpine
+FROM nginx:1.13-alpine
 RUN apk add --no-cache bash curl
-EXPOSE 3000
-WORKDIR /data
-ADD . /data
-CMD ["npm", "run", "start"]
+EXPOSE 80
+COPY src /usr/share/nginx/html
